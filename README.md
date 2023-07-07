@@ -1,0 +1,2 @@
+# tradeSmart
+Automated Trading Platform
