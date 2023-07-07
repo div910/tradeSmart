@@ -9,11 +9,13 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = os.path.dirname((os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(PROJECT_ROOT)
+BASE_DIR = os.path.dirname(PROJECT_DIR)
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -85,6 +87,18 @@ DATABASES = {
     }
 }
 
+INFLUX_DATABASE = {
+    'CONNECT': {
+        'host': 'localhost',
+        'port':8086,
+        'username': 'nodered',
+        'password': 'nodered'
+    },
+    'DATABASE': {
+        'nse_stocks': 'nse_stocks',
+        'nse_indicators': 'nse_indicators'
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
