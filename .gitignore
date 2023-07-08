@@ -3,4 +3,4 @@ venv/
 /.idea
 .idea/
 __pycache__/
-
+secret.py
