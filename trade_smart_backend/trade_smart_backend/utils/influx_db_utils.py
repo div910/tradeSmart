@@ -1,53 +1,37 @@
-from influxdb import InfluxDBClient
-import datetime
-import logging
-from trade_smart_backend.apps.app_settings import *
+from influxdb_client import InfluxDBClient, Point
 from django.conf import settings
+from influxdb_client.client.write_api import SYNCHRONOUS
 
 class Influx():
 
     def __init__(self, database='nse_stocks'):
-        self.db = settings.INFLUX_DATABASE.get('DATABASE', {}).get(database, 'nse_stocks')
-        self.client = InfluxDBClient(settings.INFLUX_DATABASE.get('CONNECT', {}).get('host'), settings.INFLUX_DATABASE.get('CONNECT', {}).get('port'), settings.INFLUX_DATABASE.get('CONNECT', {}).get('username'), settings.INFLUX_DATABASE.get('CONNECT', {}).get('password'), self.db)
-        self.client.create_database(self.db)
-        self.client.switch_database(self.db)
+        self.url = settings.INFLUX_DATABASE.get('CONNECT', {}).get('url', 'http://localhost:8086')
+        self.token = settings.INFLUX_DATABASE.get('CONNECT', {}).get('token', '')
+        self.org = settings.INFLUX_DATABASE.get('CONNECT', {}).get('org', '')
+        self.bucket = settings.INFLUX_DATABASE.get('CONNECT', {}).get('bucket', '')
 
-    #Setup Payload
-    def prepare_history_data(self, measurement, source, history_data):
-        json_payload = []
-        for i in history_data:
-            time = datetime.datetime.strptime(i[0].split('+')[0], '%Y-%m-%dT%H:%M:%S') + datetime.timedelta(hours=5, minutes=30)
-            data = {
-                "measurement": measurement,
-                "tags": {
-                    "source": source,
-                    "ticker": "TSLA"
-                },
-                "time": time,
-                "fields": {
-                    'open': i[1],
-                    'high': i[2],
-                    'low': i[3],
-                    'close': i[4],
-                    'volume': i[5]
-                }
-            }
-            json_payload.append(data)
-        self.insert(json_payload)
-        return json_payload
+    def insert_dataframe(self, measurement=None, tag_dict=None, fields_dataframe=None):
+        if measurement is None or tag_dict is None or fields_dataframe is None:
+            return {"success": False, "error": "Incorrect input Arguments"}
 
-    def validate_data(self, json_payload):
-    #     use json schema validator
-        return {'success': True}
+        # # Convert DataFrame to InfluxDB line protocol format
+        points = []
+        for _, row in fields_dataframe.iterrows():
+            point = Point(measurement)
+            for tag_key, tag_value in tag_dict.items():
+                point.tag(tag_key, tag_value)
+            for column, value in row.items():
+                point.field(column, value)
+            point.time(_)
+            points.append(point)
 
-    def insert(self, json_payload):
-        validation_resp = self.validate_data(json_payload)
-        if validation_resp.get('success', False) is False:
-            logging.info(f'Validation Failed for data to be inserted {json_payload}')
-            return {'success': False, 'error': ERROR_RESPONSE_CODES['INPUT_VALIDATION_FAILURE']}
-        try:
-            self.client.write_points(json_payload)
-        except Exception as ex:
-            logging.error(f'Influx insert error {ex} for payload {json_payload}')
-            return {'success': False, 'error': ERROR_RESPONSE_CODES['DATABASE_FAILURE']}
-        return {'success': True}
+        # [p for p in points]
+        line_protocol = "\n".join([p.to_line_protocol() for p in points])
+
+        # Write data to InfluxDB
+        client = InfluxDBClient(url=self.url, token=self.token)
+        write_api = client.write_api(write_options=SYNCHRONOUS)
+        writer_resp = write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
+        client.close()
+
+        return writer_resp

@@ -1,7 +1,10 @@
-from django.shortcuts import render
 from django.shortcuts import HttpResponse
 # Create your views here.
-from trade_smart_backend.apps.data.services.web_socket import WebSocketConsumer
+from trade_smart_backend.apps.data.channel.yahoo_finance.data_collector import DataCollector
 
-def collect_data(request):
-    return HttpResponse("collect_history_data Success.")
+def collect_history_data_from_yahoo(request):
+    config = {
+        "symbol": request.GET.get('symbol')
+    }
+    resp = DataCollector(config).get_history_data_previous_date()
+    return HttpResponse(f"collect_history_data Success. {resp}")

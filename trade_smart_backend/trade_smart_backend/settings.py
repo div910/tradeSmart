@@ -94,10 +94,10 @@ DATABASES = {
 
 INFLUX_DATABASE = {
     'CONNECT': {
-        'host': 'localhost',
-        'port':8086,
-        'username': 'nodered',
-        'password': 'nodered'
+        'url': 'http://localhost:8086',
+        'token' : "c4hEuDHM9LPxNfWH-oFyFfOeIDihTnQx_OEeg99mrd6bZFNa1hEJx7a_aV-cFUH5nWquXUWU5IAeQ975itS4MQ==",
+        'org' : "trade_smart",
+        'bucket' : "trade_smart"
     },
     'DATABASE': {
         'nse_stocks': 'nse_stocks',

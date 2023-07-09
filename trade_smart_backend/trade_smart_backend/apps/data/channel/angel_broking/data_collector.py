@@ -1,4 +1,6 @@
-from smartapi import SmartConnect
+# from trade_smart_backend.apps.data.services.smart_web_socket import SmartConnect
+from .smart_web_socket import SmartConnect
+import pyotp
 
 class HistoricalDataFetcher:
     def __init__(self, api_key):
@@ -30,7 +32,7 @@ if __name__ == "__main__":
     api_key = "YOUR_API_KEY"
     client_id = "YOUR_CLIENT_ID"
     password = "YOUR_PASSWORD"
-
+    totp = pyotp.TOTP(token).now()
     obj = HistoricalDataFetcher(api_key)
     obj.login(client_id, password)
 
@@ -42,14 +44,14 @@ if __name__ == "__main__":
 
     obj.fetch_historical_data(exchange, symbol_token, interval, from_date, to_date)
 
-try:
-    historicParam={
-    "exchange": "NSE",
-    "symboltoken": "3045",
-    "interval": "ONE_MINUTE",
-    "fromdate": "2021-02-08 09:00",
-    "todate": "2021-02-08 09:16"
-    }
-    obj.getCandleData(historicParam)
-except Exception as e:
-    print("Historic Api failed: {}".format(e.message))
+# try:
+#     historicParam={
+#     "exchange": "NSE",
+#     "symboltoken": "3045",
+#     "interval": "ONE_MINUTE",
+#     "fromdate": "2021-02-08 09:00",
+#     "todate": "2021-02-08 09:16"
+#     }
+#     obj.getCandleData(historicParam)
+# except Exception as e:
+#     print("Historic Api failed: {}".format(e.message))

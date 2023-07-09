@@ -4,3 +4,8 @@ venv/
 .idea/
 __pycache__/
 secret.py
+notebooks/datasets/
+
+.ipynb_checkpoints
+
+.DS_Store
