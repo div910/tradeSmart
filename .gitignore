@@ -3,6 +3,7 @@ venv/
 /.idea
 .idea/
 __pycache__/
+__pycache__/*
 secret.py
 notebooks/datasets/
 

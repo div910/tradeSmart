@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-from .secret import SECRET_MANAGER_CONFIG
+from .secret import *
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_ROOT = os.path.dirname((os.path.abspath(__file__)))
@@ -93,15 +93,12 @@ DATABASES = {
 }
 
 INFLUX_DATABASE = {
+    # Dev
     'CONNECT': {
         'url': 'http://localhost:8086',
         'token' : "c4hEuDHM9LPxNfWH-oFyFfOeIDihTnQx_OEeg99mrd6bZFNa1hEJx7a_aV-cFUH5nWquXUWU5IAeQ975itS4MQ==",
         'org' : "trade_smart",
         'bucket' : "trade_smart"
-    },
-    'DATABASE': {
-        'nse_stocks': 'nse_stocks',
-        'nse_indicators': 'nse_indicators'
     }
 }
 
