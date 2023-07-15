@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'trade_smart',
-        'USER': 'trade_smart_root',
-        'PASSWORD': 'trade_smart_root',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'POST': 3306
     }
@@ -96,7 +96,8 @@ INFLUX_DATABASE = {
     # Dev
     'CONNECT': {
         'url': 'http://localhost:8086',
-        'token' : "c4hEuDHM9LPxNfWH-oFyFfOeIDihTnQx_OEeg99mrd6bZFNa1hEJx7a_aV-cFUH5nWquXUWU5IAeQ975itS4MQ==",
+        'token': "7fiJR_wFpMWPUOL6NpJFYXGc4FInt0vOWBwqkUCO_AANii0wRv43fshGrmkIS04YpE2Gp5MGKbcJcm10vIGNpw==", #Ubuntu local host
+        # 'token' : "c4hEuDHM9LPxNfWH-oFyFfOeIDihTnQx_OEeg99mrd6bZFNa1hEJx7a_aV-cFUH5nWquXUWU5IAeQ975itS4MQ==",  # Mac local host
         'org' : "trade_smart",
         'bucket' : "trade_smart"
     }
