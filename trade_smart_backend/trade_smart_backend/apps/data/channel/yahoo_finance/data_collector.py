@@ -75,7 +75,7 @@ class DataCollector:
             chunk = history_data_imp_columns_renamed.iloc[i:i + 100]
             task = asyncio.create_task(self.influx_obj.insert_dataframe_async(measurement='candlestick', tag_dict={'symbol': self.symbol}, fields_dataframe=chunk))
             tasks.append(task)
-        print(tasks)
+
         processed_result = await asyncio.gather(*tasks)
         print(processed_result)
         return {"success": True, "info": f"data collected for tasks: {tasks} previous date {processed_result}"}

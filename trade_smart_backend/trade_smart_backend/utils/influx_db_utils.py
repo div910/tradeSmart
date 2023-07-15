@@ -1,4 +1,5 @@
 from influxdb_client import InfluxDBClient, Point
+from influxdb_client.client.influxdb_client_async import InfluxDBClientAsync
 from django.conf import settings
 from influxdb_client.client.write_api import SYNCHRONOUS
 from datetime import datetime
@@ -31,15 +32,21 @@ class Influx():
         # [p for p in points]
         line_protocol = "\n".join([p.to_line_protocol() for p in points])
 
-        # Write data to InfluxDB
-        client = InfluxDBClient(url=self.url, token=self.token)
-        write_api = client.write_api(write_options=SYNCHRONOUS)
-        writer_resp = write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
-        client.close()
+        # # Write data to InfluxDB
+        # client = InfluxDBClient(url=self.url, token=self.token)
+        # write_api = client.write_api(write_options=SYNCHRONOUS)
+        # writer_resp = write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
+        # client.close()
 
-        return writer_resp
+        # Write data to InfluxDB
+        with InfluxDBClient(url=self.url, token=self.token) as client:
+            with client.write_api(write_options=SYNCHRONOUS) as write_api:
+                write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
+
+        return
 
     async def insert_dataframe_async(self, measurement=None, tag_dict=None, fields_dataframe=None, num = 0):
+        print(f'HERE~{num}')
         if measurement is None or tag_dict is None or fields_dataframe is None:
             return {"success": False, "error": "Incorrect input arguments"}
 
@@ -56,11 +63,9 @@ class Influx():
 
         line_protocol = "\n".join([p.to_line_protocol() for p in points])
 
-        # Write data to InfluxDB
-        client = InfluxDBClient(url=self.url, token=self.token)
-        write_api = client.write_api(write_options=SYNCHRONOUS)
-        writer_resp = write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
-        client.close()
+        async with InfluxDBClientAsync(url=self.url, token=self.token, org=self.org) as client:
+            await client.write_api().write(bucket=self.bucket, record=line_protocol)
+
         return {"success": True}
 
     def fetch_records(self, measurement):
