@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  mysql8:
+    image: mysql:8
+    container_name: mysql8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ~/home/ml/Desktop/projects/mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - mysql8:db
+    ports:
+      - "8888:80"
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    volumes:
+      - ~/home/ml/Desktop/projects/influxdb_data:/var/lib/influxdb
+    ports:
+      - "8086:8086"
