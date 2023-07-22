@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-from .secret import *
+from trade_smart_backend.secret import *
 from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_ROOT = os.path.dirname((os.path.abspath(__file__)))
@@ -160,3 +160,25 @@ DATA_1_API_KEY = SECRET_MANAGER_CONFIG.get("DATA_1_API_KEY", "")
 TRADE_SECRET_KEY = SECRET_MANAGER_CONFIG.get("TRADE_SECRET_KEY", "")
 CLIENT_ID = SECRET_MANAGER_CONFIG.get("CLIENT_ID", "")
 CLIENT_PASSWORD = SECRET_MANAGER_CONFIG.get("CLIENT_PASSWORD", "")
+
+
+# Celery configuration
+CELERY_ENABLED = True
+CELERY_IMPORTS = [
+    'trade_smart_backend.celery_app.tasks',
+    'trade_smart_backend.celery_app.tasks_data'
+]
+CELERY_CREATE_MISSING_QUEUES = True
+CELERY_IGNORE_RESULT = True
+BROKER_TRANSPORT_OPTIONS = {
+    'visibility_timeout': 3600
+}
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_APP_NAME = 'trade_smart_backend_celery'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

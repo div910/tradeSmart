@@ -26,3 +26,13 @@ services:
       - ~/home/ml/Desktop/projects/influxdb_data:/var/lib/influxdb
     ports:
       - "8086:8086"
+
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server --bind 0.0.0.0
+    volumes:
+      - ~/home/ml/Desktop/projects/redis_data:/data
+    ports:
+      - "6379:6379"

@@ -1,8 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+# from trade_smart_backend.celery_app.tasks import debug_task
+# from trade_smart_backend.celery_app.tasks_data import example_task
 
 
 def health(request):
+    # result = example_task.apply_async()
+    # print(result)
+    print("HELLO")
     return HttpResponse("Health Success.")
 
 def index(request):

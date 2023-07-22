@@ -9,3 +9,5 @@ numpy==1.25.0
 pandas==2.0.3
 PyMySQL==1.0.2
 yfinance==0.2.22
+celery==5.3.1
+django_celery_beat==2.5.0
