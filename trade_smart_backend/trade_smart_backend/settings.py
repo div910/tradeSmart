@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'django_celery_beat'
     # 'trade_smart_backend.apps.analyse',
     # 'trade_smart_backend.apps.data',
     # 'trade_smart_backend.apps.strategy',
@@ -182,3 +183,21 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# Celery Beat schedule configuration
+CELERY_BEAT_SCHEDULE = {
+    "example_task": {
+        "task": "trade_smart_backend.celery_app.tasks_data.example_task",
+        "schedule": {
+            "type": "crontab",
+            "minute": "*/2"
+        }
+    },
+    "debug_task": {
+        "task": "trade_smart_backend.celery_app.tasks.debug_task",
+        "schedule": {
+            "type": "interval",
+            "every": 30,
+            "period": "seconds"
+        }
+    }
+}

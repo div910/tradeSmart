@@ -36,3 +36,25 @@ services:
       - ~/home/ml/Desktop/projects/redis_data:/data
     ports:
       - "6379:6379"
+
+  celery:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: celery_container
+    command: celery -A celery_app worker -l info
+    depends_on:
+      - redis
+      - mysql8
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: celery_beat_container
+    command: celery -A celery_app beat -l info
+#    volumes:
+#      - ./trade_smart_backend:/trade_smart
+    depends_on:
+      - redis
+      - mysql8
