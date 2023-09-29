@@ -1,6 +1,6 @@
 import asyncio
 import websockets
-# from trade_smart_backend.apps.data.services.smart_web_socket import SmartWebSocket
+# from trade_smart_backend.apps.financial_data.services.smart_web_socket import SmartWebSocket
 from django.conf import settings
 # from smartapi import SmartWebSocket
 # from .smart_web_socket import SmartWebSocket
@@ -123,7 +123,7 @@ class SmartWebSocket(object):
         except ValueError:
             return
 
-        # return data
+        # return financial_data
         if data:
             self._on_message(self.ws, data)
 
@@ -242,7 +242,7 @@ asyncio.get_event_loop().run_forever()
 
 # from channels.generic.websocket import AsyncWebsocketConsumer
 # # from smartapi import SmartWebSocket
-# from trade_smart_backend.apps.data.services.smart_web_socket import SmartWebSocket
+# from trade_smart_backend.apps.financial_data.services.smart_web_socket import SmartWebSocket
 # from django.conf import settings
 #
 # class WebSocketConsumer(AsyncWebsocketConsumer):

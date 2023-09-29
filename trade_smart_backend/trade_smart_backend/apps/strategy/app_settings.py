@@ -1,23 +1,26 @@
 STRATEGY_EXECUTION_CONFIG = {
     "config_1": {
-        "indicator_data": [
+        "measurement_data": [
             {
+                "source": "influxdb",
+                "bucket": "trade_smart",
                 "name": "rsi",
-                "start_time": "current",
-                "time_delta": "60 days",
-                "interval": "minutes"
+                "start_time": "datetime.datetime.now()", # eval datetime
+                "time_delta": "datetime.timedelta(days=5)", # eval timedelta
             },
             {
+                "source": "influxdb",
+                "bucket": "trade_smart",
                 "name": "macd",
-                "start_time": "current",
-                "time_delta": "40 days",
-                "interval": "minutes"
+                "start_time": "datetime.datetime.now()", # eval datetime
+                "time_delta": "datetime.timedelta(days=5)", # eval timedelta
             },
             {
+                "source": "influxdb",
+                "bucket": "trade_smart",
                 "name": "mv20",
-                "start_time": "current",
-                "time_delta": "20 days",
-                "interval": "seconds"
+                "start_time": "datetime.datetime.now()", # eval datetime
+                "time_delta": "datetime.timedelta(days=5)", # eval timedelta
             }
         ]
     }

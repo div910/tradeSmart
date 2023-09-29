@@ -33,7 +33,7 @@ services:
     container_name: redis
     command: redis-server --bind 0.0.0.0
     volumes:
-      - ~/home/ml/Desktop/projects/redis_data:/data
+      - ~/home/ml/Desktop/projects/redis_data:/financial_data
     ports:
       - "6379:6379"
 

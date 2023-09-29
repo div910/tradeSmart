@@ -1,4 +1,4 @@
-# from trade_smart_backend.apps.data.services.smart_web_socket import SmartConnect
+# from trade_smart_backend.apps.financial_data.services.smart_web_socket import SmartConnect
 from .smart_web_socket import SmartConnect
 import pyotp
 
@@ -10,8 +10,8 @@ class HistoricalDataFetcher:
     def login(self, client_id, password):
         self.obj = SmartConnect(api_key=self.api_key)
         data = self.obj.generateSession(client_id, password)
-        self.obj.set_access_token(data["data"]["accessToken"])
-        refresh_token = data["data"]["refreshToken"]
+        self.obj.set_access_token(data["financial_data"]["accessToken"])
+        refresh_token = data["financial_data"]["refreshToken"]
         self.obj.set_refresh_token(refresh_token)
 
     def fetch_historical_data(self, exchange, symbol_token, interval, from_date, to_date):

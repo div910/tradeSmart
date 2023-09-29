@@ -1,11 +1,11 @@
 import asyncio
 from datetime import datetime
 
-async def indicator_data_populator_bulk(*args):
+async def measurement_data_populator_bulk(*args):
     coroutines = []
-    for indicator_entity in args:
-        coroutines.append(indicator_data_populator(indicator_entity))
+    for measurement_entity in args:
+        coroutines.append(measurement_data_populator(measurement_entity))
     asyncio.gather(*coroutines)
 
-async def indicator_data_populator(indicator_entity):
-    indicator_entity.populate_data()
+async def measurement_data_populator(measurement_entity):
+    measurement_entity.populate_data()

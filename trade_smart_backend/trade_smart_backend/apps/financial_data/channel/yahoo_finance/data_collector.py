@@ -7,16 +7,32 @@ import asyncio
 import yfinance as yf
 
 
+def fetch_security_candlestick_data_bulk(*args):
+    # Fetch list of securities to gather financial_data for
+    coroutines = []
+    all_security_entity = []
+    # Call individual financial_data collection function to fetch financial_data from respective
+    # source and save into influx.
+    for current_security_entity in all_security_entity:
+        coroutines.append(fetch_security_candlestick_data(current_security_entity))
+    asyncio.gather(*coroutines)
+
+async def fetch_security_candlestick_data(current_security_entity):
+    # write a function to fetch candlestick financial_data for input security entity and save it into influx
+    DataCollector(current_security_entity)
+
+
 class DataCollector:
 
-    def __init__(self, config={}):
+    def __init__(self, data_collector_entity=None):
+        self.security_entity_obj = data_collector_entity
         self.symbol = config.get("symbol")
         self.msft = yf.Ticker(self.symbol)
         self.influx_obj = Influx()
 
     """
         This function should bring all the possible details available on the platform, for a particular stock.
-        Should process all information and model it for our data storage
+        Should process all information and model it for our financial_data storage
         And after that should place the content into respective storages
     """
     def add_stock_to_database(self):
@@ -27,9 +43,9 @@ class DataCollector:
 
 
     """
-        This function would let you fetch history data from yahoo finance for a particular stock
-        This will process that data and fetch relevent details, convert it into dataframes
-        Post processing it will store all data into a timeseries dataframe.
+        This function would let you fetch history financial_data from yahoo finance for a particular stock
+        This will process that financial_data and fetch relevent details, convert it into dataframes
+        Post processing it will store all financial_data into a timeseries dataframe.
     """
     def get_history_data_previous_date(self):
         history_data = self.msft.history(period="1d", interval="1m",
@@ -50,13 +66,13 @@ class DataCollector:
                                               fields_dataframe=chunk)
             print(processed_chunk)
 
-        return {"success": True, "info": f"data collected for tasks: {tasks} previous date {processed_result}"}
+        return {"success": True, "info": f"financial_data collected for tasks: {tasks} previous date {processed_result}"}
 
 
     """
-        This function would let you fetch history data from yahoo finance for a particular stock
-        This will process that data and fetch relevent details, convert it into dataframes
-        Post processing it will store all data into a timeseries dataframe.
+        This function would let you fetch history financial_data from yahoo finance for a particular stock
+        This will process that financial_data and fetch relevent details, convert it into dataframes
+        Post processing it will store all financial_data into a timeseries dataframe.
     """
     async def get_history_data_previous_date_async(self):
         history_data = self.msft.history(period="1d", interval="1m",
@@ -78,12 +94,12 @@ class DataCollector:
 
         processed_result = await asyncio.gather(*tasks)
         print(processed_result)
-        return {"success": True, "info": f"data collected for tasks: {tasks} previous date {processed_result}"}
+        return {"success": True, "info": f"financial_data collected for tasks: {tasks} previous date {processed_result}"}
 
 
 
     """
-        Same as get_history_data_previous_date() but capable of fetching data for custom dates
+        Same as get_history_data_previous_date() but capable of fetching financial_data for custom dates
     """
 
     def get_history_data_custom_dates(self, start=None, end=None):
@@ -107,7 +123,7 @@ class DataCollector:
                                                                fields_dataframe=chunk)
             print(processed_chunk)
 
-        return {"success": True, "info": "data colllected for previous date"}
+        return {"success": True, "info": "financial_data colllected for previous date"}
 
     async def execute_parallel(self):
         tasks = []

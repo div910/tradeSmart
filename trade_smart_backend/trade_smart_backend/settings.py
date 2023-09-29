@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_beat'
     # 'trade_smart_backend.apps.analyse',
-    # 'trade_smart_backend.apps.data',
+    # 'trade_smart_backend.apps.financial_data',
     # 'trade_smart_backend.apps.strategy',
     # 'trade_smart_backend.apps.trade'
 ]
@@ -103,6 +103,15 @@ INFLUX_DATABASE = {
         'bucket' : "trade_smart"
     }
 }
+
+
+INFLUXDB_CONNECTION_POOL = {
+    'host': 'http://localhost:8086',
+    'token': '7fiJR_wFpMWPUOL6NpJFYXGc4FInt0vOWBwqkUCO_AANii0wRv43fshGrmkIS04YpE2Gp5MGKbcJcm10vIGNpw==',
+    'org': 'trade_smart',
+    'pool_size': 10,
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -201,3 +210,10 @@ CELERY_BEAT_SCHEDULE = {
         }
     }
 }
+
+# import requests_cache
+# yf_cache = requests_cache.CachedSession('yfinance.cache')
+# yf_cache.headers['User-agent'] = 'trade_smart/1.0'
+# APPLICATION_SESSION_OBJECTS = {
+#     "yahoo_finance": yf_cache
+# }

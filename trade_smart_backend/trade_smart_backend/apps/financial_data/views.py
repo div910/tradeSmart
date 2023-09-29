@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 # Create your views here.
-from trade_smart_backend.apps.data.channel.yahoo_finance.data_collector import DataCollector
+from trade_smart_backend.apps.financial_data.channel.yahoo_finance.data_collector import DataCollector
 
 async def collect_history_data_from_yahoo(request):
     config = {

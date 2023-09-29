@@ -32,13 +32,13 @@ class Influx():
         # [p for p in points]
         line_protocol = "\n".join([p.to_line_protocol() for p in points])
 
-        # # Write data to InfluxDB
+        # # Write financial_data to InfluxDB
         # client = InfluxDBClient(url=self.url, token=self.token)
         # write_api = client.write_api(write_options=SYNCHRONOUS)
         # writer_resp = write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
         # client.close()
 
-        # Write data to InfluxDB
+        # Write financial_data to InfluxDB
         with InfluxDBClient(url=self.url, token=self.token) as client:
             with client.write_api(write_options=SYNCHRONOUS) as write_api:
                 write_api.write(bucket=self.bucket, org=self.org, record=line_protocol)
@@ -74,6 +74,19 @@ class Influx():
         query = f'from(bucket: "{self.bucket}") |> range(start: 0) |> filter(fn: (r) => r._measurement == "{measurement}")'
         tables = client.query_api().query(query, org=self.org)
         client.close()
+        return tables
+
+    def execute_custom_query(self, query=None):
+        # Need to implement a query builder method
+        if query is None:
+            return
+        tables = None
+        try:
+            with InfluxDBClient(url=self.url, token=self.token) as client:
+                tables = client.query_api().query(query, org=self.org)
+        except Exception as ex:
+            raise
+
         return tables
 
     def delete_records(self, measurement=None, start=None, end=None, tag=None):

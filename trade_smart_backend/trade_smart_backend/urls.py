@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from .views import *
 from trade_smart_backend.apps.trade import urls as trade_urls
-from trade_smart_backend.apps.data import urls as data_urls
+from trade_smart_backend.apps.financial_data import urls as data_urls
 from trade_smart_backend.apps.analyse import urls as analyse_urls
 
 urlpatterns = [
@@ -26,6 +26,6 @@ urlpatterns = [
     path('health/', health),
     path('admin/', admin.site.urls),
     path('trade/', include(trade_urls)),
-    path('data/', include(data_urls)),
+    path('financial_data/', include(data_urls)),
     path('analyse/', include(analyse_urls))
 ]

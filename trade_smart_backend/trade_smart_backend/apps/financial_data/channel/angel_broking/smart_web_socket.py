@@ -120,7 +120,7 @@ class SmartWebSocket(object):
         except ValueError:
             return
 
-        # return data
+        # return financial_data
         if data:
             self._on_message(self.ws, data)
 
@@ -206,7 +206,7 @@ class SmartConnect(object):
         "api.order.cancel": "/rest/secure/angelbroking/order/v1/cancelOrder",
         "api.order.book": "/rest/secure/angelbroking/order/v1/getOrderBook",
 
-        "api.ltp.data": "/rest/secure/angelbroking/order/v1/getLtpData",
+        "api.ltp.financial_data": "/rest/secure/angelbroking/order/v1/getLtpData",
         "api.trade.book": "/rest/secure/angelbroking/order/v1/getTradeBook",
         "api.rms.limit": "/rest/secure/angelbroking/user/v1/getRMS",
         "api.holding": "/rest/secure/angelbroking/portfolio/v1/getHolding",
@@ -219,7 +219,7 @@ class SmartConnect(object):
         "api.gtt.details": "/rest/secure/angelbroking/gtt/v1/ruleDetails",
         "api.gtt.list": "/rest/secure/angelbroking/gtt/v1/ruleList",
 
-        "api.candle.data": "/rest/secure/angelbroking/historical/v1/getCandleData"
+        "api.candle.financial_data": "/rest/secure/angelbroking/historical/v1/getCandleData"
     }
 
     try:
@@ -401,20 +401,20 @@ class SmartConnect(object):
         loginResultObject = self._postRequest("api.login", params)
 
         if loginResultObject['status'] == True:
-            jwtToken = loginResultObject['data']['jwtToken']
+            jwtToken = loginResultObject['financial_data']['jwtToken']
             self.setAccessToken(jwtToken)
-            refreshToken = loginResultObject['data']['refreshToken']
-            feedToken = loginResultObject['data']['feedToken']
+            refreshToken = loginResultObject['financial_data']['refreshToken']
+            feedToken = loginResultObject['financial_data']['feedToken']
             self.setRefreshToken(refreshToken)
             self.setFeedToken(feedToken)
             user = self.getProfile(refreshToken)
 
-            id = user['data']['clientcode']
+            id = user['financial_data']['clientcode']
             # id='D88311'
             self.setUserId(id)
-            user['data']['jwtToken'] = "Bearer " + jwtToken
-            user['data']['refreshToken'] = refreshToken
-            user['data']['feedToken'] = feedToken
+            user['financial_data']['jwtToken'] = "Bearer " + jwtToken
+            user['financial_data']['refreshToken'] = refreshToken
+            user['financial_data']['feedToken'] = feedToken
 
             return user
         else:
@@ -426,8 +426,8 @@ class SmartConnect(object):
 
     def generateToken(self, refresh_token):
         response = self._postRequest('api.token', {"refreshToken": refresh_token})
-        jwtToken = response['data']['jwtToken']
-        feedToken = response['data']['feedToken']
+        jwtToken = response['financial_data']['jwtToken']
+        feedToken = response['financial_data']['feedToken']
         self.setFeedToken(feedToken)
         self.setAccessToken(jwtToken)
 
@@ -443,9 +443,9 @@ class SmartConnect(object):
         tokenSet = {}
 
         if "jwtToken" in response:
-            tokenSet['jwtToken'] = response['data']['jwtToken']
+            tokenSet['jwtToken'] = response['financial_data']['jwtToken']
         tokenSet['clientcode'] = self.userId
-        tokenSet['refreshToken'] = response['data']["refreshToken"]
+        tokenSet['refreshToken'] = response['financial_data']["refreshToken"]
 
         return tokenSet
 
@@ -461,7 +461,7 @@ class SmartConnect(object):
             if params[k] is None:
                 del (params[k])
 
-        orderResponse = self._postRequest("api.order.place", params)['data']['orderid']
+        orderResponse = self._postRequest("api.order.place", params)['financial_data']['orderid']
 
         return orderResponse
 
@@ -485,7 +485,7 @@ class SmartConnect(object):
             "tradingsymbol": tradingsymbol,
             "symboltoken": symboltoken
         }
-        ltpDataResponse = self._postRequest("api.ltp.data", params)
+        ltpDataResponse = self._postRequest("api.ltp.financial_data", params)
         return ltpDataResponse
 
     def orderBook(self):
@@ -525,7 +525,7 @@ class SmartConnect(object):
 
         createGttRuleResponse = self._postRequest("api.gtt.create", params)
         # print(createGttRuleResponse)
-        return createGttRuleResponse['data']['id']
+        return createGttRuleResponse['financial_data']['id']
 
     def gttModifyRule(self, modifyRuleParams):
         params = modifyRuleParams
@@ -534,7 +534,7 @@ class SmartConnect(object):
                 del (params[k])
         modifyGttRuleResponse = self._postRequest("api.gtt.modify", params)
         # print(modifyGttRuleResponse)
-        return modifyGttRuleResponse['data']['id']
+        return modifyGttRuleResponse['financial_data']['id']
 
     def gttCancelRule(self, gttCancelParams):
         params = gttCancelParams
@@ -574,7 +574,7 @@ class SmartConnect(object):
         for k in list(params.keys()):
             if params[k] is None:
                 del (params[k])
-        getCandleDataResponse = self._postRequest("api.candle.data", historicDataParams)
+        getCandleDataResponse = self._postRequest("api.candle.financial_data", historicDataParams)
         return getCandleDataResponse
 
     def _user_agent(self):
