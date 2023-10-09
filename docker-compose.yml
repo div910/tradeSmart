@@ -37,6 +37,16 @@ services:
     ports:
       - "6379:6379"
 
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - static:/app/staticfiles
+    restart: always
+    ports:
+      - "8000:8000"
+
 #  celery:
 #    build:
 #      context: .

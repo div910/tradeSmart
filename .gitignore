@@ -11,6 +11,6 @@ notebooks/datasets/
 
 .DS_Store
 
-nginx/
-services/
-uwsgi/
+#nginx/
+#services/
+#uwsgi/
