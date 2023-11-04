@@ -40,31 +40,45 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
-    volumes:
-      - static:/app/staticfiles
-    restart: always
+      dockerfile: ./Dockerfile
+      network: host
+    container_name: web
+    command: /bin/bash -c "/usr/local/bin/supervisord -n -c /etc/supervisord.d/web.conf"
     ports:
-      - "8000:8000"
+      - "80:80"
+    depends_on:
+      - redis
+      - mysql8
 
-#  celery:
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-#    container_name: celery_container
-#    command: celery -A celery_app worker -l info
-#    depends_on:
-#      - redis
-#      - mysql8
-#
-#  celery-beat:
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
-#    container_name: celery_beat_container
-#    command: celery -A celery_app beat -l info
-##    volumes:
-##      - ./trade_smart_backend:/trade_smart
-#    depends_on:
-#      - redis
-#      - mysql8
+  worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    container_name: worker
+    command: /bin/bash -c "/usr/local/bin/supervisord -n -c /etc/supervisord.d/worker.conf"
+    depends_on:
+      - redis
+      - mysql8
+
+  beat:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    container_name: beat
+    command: /bin/bash -c "/usr/local/bin/supervisord -n -c /etc/supervisord.d/beat.conf"
+    depends_on:
+      - redis
+      - mysql8
+
+  flower:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    container_name: flower
+    command: /bin/bash -c "/usr/local/bin/supervisord -n -c /etc/supervisord.d/flower.conf"
+    depends_on:
+      - redis
+      - mysql8

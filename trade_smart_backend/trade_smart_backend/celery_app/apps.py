@@ -5,11 +5,13 @@ from django.conf import settings
 
 os.environ.setdefault('DEFAULT_SETTINGS_MODULE', 'settings')
 
-app = _Celery(settings.CELERY_APP_NAME, broker='redis://127.0.0.1:6379')
+app = _Celery(settings.CELERY_APP_NAME)
 
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app.config_from_object('django.conf:settings')
 
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+# app.conf.beat_schedule = settings.CELERY_BEAT_SCHEDULE
+
+app.autodiscover_tasks()
 
 class CeleryAppConfig(AppConfig):
     name = 'celery_app'

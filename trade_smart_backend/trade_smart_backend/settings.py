@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from trade_smart_backend.secret import *
 from pathlib import Path
+from datetime import timedelta
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 PROJECT_ROOT = os.path.dirname((os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(PROJECT_ROOT)
@@ -39,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_celery_beat'
+    'django.contrib.staticfiles'
     # 'trade_smart_backend.apps.analyse',
     # 'trade_smart_backend.apps.financial_data',
     # 'trade_smart_backend.apps.strategy',
@@ -146,7 +147,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_ROOT =  os.path.join(BASE_DIR, 'trade_smart_backend/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'trade_smart_backend/static')
 STATIC_URL = '/static/'
 
 STATICFILES_FINDERS = {
@@ -180,34 +181,37 @@ CELERY_IMPORTS = [
 ]
 CELERY_CREATE_MISSING_QUEUES = True
 CELERY_IGNORE_RESULT = True
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
+CELERYD_PREFETCH_MULTIPLIER = 1
 BROKER_TRANSPORT_OPTIONS = {
-    'visibility_timeout': 3600
+    'visibility_timeout': 3600,
+    'priority_steps': list(range(10))
 }
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
-BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # Use the Redis service name defined in docker-compose.yml
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # Use the Redis service name defined in docker-compose.yml
 CELERY_APP_NAME = 'trade_smart_backend_celery'
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'  # Use the Redis service name defined in docker-compose.yml
-CELERY_ACCEPT_CONTENT = ['json']
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TIMEZONE = 'UTC'
+
 # Celery Beat schedule configuration
 CELERY_BEAT_SCHEDULE = {
     "example_task": {
         "task": "trade_smart_backend.celery_app.tasks_data.example_task",
-        "schedule": {
-            "type": "crontab",
-            "minute": "*/2"
-        }
+        "schedule": timedelta(seconds=5),
+        "options": {"queue": "ts_queue_1"}
     },
     "debug_task": {
         "task": "trade_smart_backend.celery_app.tasks.debug_task",
         "schedule": {
             "type": "interval",
-            "every": 30,
+            "every": 3,
             "period": "seconds"
-        }
+        },
+        "options": {"queue": "ts_queue_2"}
     }
 }
 

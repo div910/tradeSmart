@@ -15,6 +15,11 @@ def health(request):
 def index(request):
     return render(request, "index.html")
 
+def push_task(request):
+
+    return HttpResponse("Push Task Success.")
+
+
 def get_history_data():
     pass
 

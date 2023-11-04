@@ -1,5 +1,5 @@
 """ CELERY APP"""
-from __future__ import absolute_import, unicode_literals
+
 import os
 import sys
 from os.path import dirname
@@ -12,4 +12,4 @@ sys.path.insert(0, os.path.abspath(os.path.join(root_path, proj_name, proj_name,
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trade_smart_backend.settings')
 
-from trade_smart_backend.celery_app.apps import app
+from trade_smart_backend.celery_app.apps import app as celery_app
