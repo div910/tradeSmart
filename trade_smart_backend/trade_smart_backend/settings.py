@@ -179,6 +179,7 @@ CELERY_IMPORTS = [
     'trade_smart_backend.celery_app.tasks',
     'trade_smart_backend.celery_app.tasks_data'
 ]
+CELERY_DEFAULT_QUEUE = 'celery'
 CELERY_CREATE_MISSING_QUEUES = True
 CELERY_IGNORE_RESULT = True
 CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
@@ -206,11 +207,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     "debug_task": {
         "task": "trade_smart_backend.celery_app.tasks.debug_task",
-        "schedule": {
-            "type": "interval",
-            "every": 3,
-            "period": "seconds"
-        },
+        "schedule": 3.0,
         "options": {"queue": "ts_queue_2"}
     }
 }

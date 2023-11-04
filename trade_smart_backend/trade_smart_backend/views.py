@@ -7,7 +7,7 @@ from trade_smart_backend.celery_app.tasks import debug_task
 def health(request):
     # result = example_task.apply_async()
     # print(result)
-    result_2 = debug_task.apply_async()
+    result_2 = debug_task.apply_async(queue='ts_queue_1')
     print(result_2)
     print("HELLO")
     return HttpResponse("Health Success.")

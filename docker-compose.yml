@@ -79,6 +79,8 @@ services:
       network: host
     container_name: flower
     command: /bin/bash -c "/usr/local/bin/supervisord -n -c /etc/supervisord.d/flower.conf"
+    ports:
+      - "5555:5555"
     depends_on:
       - redis
       - mysql8
