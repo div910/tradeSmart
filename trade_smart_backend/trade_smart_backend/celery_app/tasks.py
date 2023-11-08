@@ -1,7 +1,7 @@
 from trade_smart_backend.celery_app.apps import app
 from celery.schedules import crontab
 import asyncio
-from trade_smart_backend.apps.financial_data.channel.yahoo_finance.data_collector import \
+from trade_smart_backend.apps.financial_data.collector.channel.yahoo_finance.model import \
     fetch_security_candlestick_data_bulk
 
 

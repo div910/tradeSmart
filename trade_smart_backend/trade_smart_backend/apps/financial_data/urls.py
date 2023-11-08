@@ -4,4 +4,5 @@ from .views import *
 
 urlpatterns = [
     path('collect_data/', collect_history_data_from_yahoo),
+    path('view_candlestick/', view_financial_data)
 ]

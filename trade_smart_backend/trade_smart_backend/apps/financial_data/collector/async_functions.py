@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime
-from trade_smart_backend.apps.financial_data.financial_data_base import DataCollector
+from trade_smart_backend.apps.financial_data.collector.financial_data_collector_base import DataCollector
 
 def fetch_security_candlestick_data_bulk(*args):
     # Fetch list of securities to gather financial_data for
