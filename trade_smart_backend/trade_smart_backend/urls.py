@@ -32,5 +32,6 @@ urlpatterns = [
 
 #     All API that mimic the use of some service yet to be made
     path('store_instrument/', store_instrument),
+    path('collect_angel_broking_history_data/', collect_angel_broking_history_data)
 
 ]

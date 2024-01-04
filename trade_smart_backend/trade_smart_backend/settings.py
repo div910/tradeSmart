@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'trade_smart',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'localhost',
+        'HOST': '0.0.0.0',
         'PORT': 3306
     }
 }

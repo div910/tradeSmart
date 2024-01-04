@@ -77,5 +77,10 @@ def store_instrument(request):
     }]
     influx_resp = Influx().insert_dataframe(measurement = "test", tag_dict = {"instrument": data_storage_log_dict.get("ins_name")}, fields_list=measurement_list)
     print(influx_resp)
-    return HttpResponse(json.dumps({"succss": True}))
+    return HttpResponse(json.dumps({"success": True}))
 
+@csrf_exempt
+def collect_angel_broking_history_data(request):
+    from trade_smart_backend.apps.financial_data.collector.channel.angel_broking.model import DataCollector
+    DataCollector().get_history_data_previous_date()
+    return HttpResponse(json.dumps({"success": True}))
