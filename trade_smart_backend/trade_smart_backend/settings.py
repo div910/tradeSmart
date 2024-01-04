@@ -98,7 +98,7 @@ INFLUX_DATABASE = {
     # Dev
     'CONNECT': {
         'url': 'http://localhost:8086',
-        'token': "7fiJR_wFpMWPUOL6NpJFYXGc4FInt0vOWBwqkUCO_AANii0wRv43fshGrmkIS04YpE2Gp5MGKbcJcm10vIGNpw==", #Ubuntu local host
+        'token': "yx6JRL0nCzxw5Q67CQ2OPlFdJoVqo4cOHk7gRjfMY43cJlIzRXXNJ0MTB9K-EY7PwGRpq_uRKAAcDYsoagA5gg==", #Ubuntu local host
         # 'token' : "c4hEuDHM9LPxNfWH-oFyFfOeIDihTnQx_OEeg99mrd6bZFNa1hEJx7a_aV-cFUH5nWquXUWU5IAeQ975itS4MQ==",  # Mac local host
         'org' : "trade_smart",
         'bucket' : "trade_smart"
@@ -200,16 +200,16 @@ CELERY_TIMEZONE = 'UTC'
 
 # Celery Beat schedule configuration
 CELERY_BEAT_SCHEDULE = {
-    "example_task": {
-        "task": "trade_smart_backend.celery_app.tasks_data.example_task",
-        "schedule": timedelta(seconds=5),
-        "options": {"queue": "ts_queue_1"}
-    },
-    "debug_task": {
-        "task": "trade_smart_backend.celery_app.tasks.debug_task",
-        "schedule": 3.0,
-        "options": {"queue": "ts_queue_2"}
-    }
+    # "example_task": {
+    #     "task": "trade_smart_backend.celery_app.tasks_data.example_task",
+    #     "schedule": timedelta(seconds=5),
+    #     "options": {"queue": "ts_queue_1"}
+    # },
+    # "debug_task": {
+    #     "task": "trade_smart_backend.celery_app.tasks.debug_task",
+    #     "schedule": 3.0,
+    #     "options": {"queue": "ts_queue_2"}
+    # }
 }
 
 # import requests_cache

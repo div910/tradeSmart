@@ -14,3 +14,4 @@ redis==5.0.1
 requests==2.31.0
 flower==2.0.1
 uWSGI==2.0.22
+SQLAlchemy==2.0.25

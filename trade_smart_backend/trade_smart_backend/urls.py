@@ -27,5 +27,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('trade/', include(trade_urls)),
     path('financial_data/', include(data_urls)),
-    path('analyse/', include(analyse_urls))
+    path('analyse/', include(analyse_urls)),
+
+
+#     All API that mimic the use of some service yet to be made
+    path('store_instrument/', store_instrument),
+
 ]
