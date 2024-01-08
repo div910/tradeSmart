@@ -17,3 +17,4 @@ uWSGI==2.0.22
 SQLAlchemy==2.0.25
 logzero==1.7.0
 websocket==0.2.1
+scipy==1.11.4
