@@ -15,3 +15,5 @@ requests==2.31.0
 flower==2.0.1
 uWSGI==2.0.22
 SQLAlchemy==2.0.25
+logzero==1.7.0
+websocket==0.2.1

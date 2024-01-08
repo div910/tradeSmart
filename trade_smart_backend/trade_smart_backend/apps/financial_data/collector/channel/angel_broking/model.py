@@ -3,38 +3,21 @@ import pandas as pd
 from pathlib import Path
 from trade_smart_backend.utils.influx_db_utils import Influx
 import asyncio
-#Data Source
-import yfinance as yf
 from trade_smart_backend.apps.financial_data.app_settings import *
+from django.conf import settings
 
-def fetch_security_candlestick_data_bulk(*args):
-    # Fetch list of securities to gather financial_data for
-    coroutines = []
-    all_security_entity = []
-    # Call individual financial_data collection function to fetch financial_data from respective
-    # source and save into influx.
-    for current_security_entity in all_security_entity:
-        coroutines.append(fetch_security_candlestick_data(current_security_entity))
-    asyncio.gather(*coroutines)
+from SmartApi.smartConnect import SmartConnect
+import pyotp
+import requests
 
-async def fetch_security_candlestick_data(current_security_entity):
-    # write a function to fetch candlestick financial_data for input security entity and save it into influx
-    DataCollector(current_security_entity)
-
-
+creds = settings.SECRET_MANAGER_CONFIG
 class DataCollector:
 
     def __init__(self, data_collector_entity=None):
         self.security_entity_obj = data_collector_entity
         self.symbol = SYMBOL_CONFIG.get("symbol")
-        self.msft = yf.Ticker(self.symbol)
         self.influx_obj = Influx()
 
-    """
-        This function should bring all the possible details available on the platform, for a particular stock.
-        Should process all information and model it for our financial_data storage
-        And after that should place the content into respective storages
-    """
     def add_stock_to_database(self):
         # Fetch Stock Details from Yahoo Finance
         # process stock details dictionary to store into Database
@@ -48,6 +31,19 @@ class DataCollector:
         Post processing it will store all financial_data into a timeseries dataframe.
     """
     def get_history_data_previous_date(self):
+        print(creds)
+        obj = SmartConnect(api_key=creds.get("HISTORICAL_API_KEY"))
+        try:
+            token = ""
+            totp = pyotp.TOTP(token).now()
+        except Exception as e:
+            print("Invalid Token: The provided token is not valid.")
+            raise e
+        data = obj.generateSession(creds.get("CLIENT_ID"), creds.get("CLIENT_PASSWORD"), totp=totp)
+        refresh_token = data["data"]["refreshToken"]
+        feed_token = obj.getfeedToken()
+        user_profile = obj.getProfile(refresh_token)
+        print(user_profile)
         history_data = self.msft.history(period="1d", interval="1m",
                 start=None, end=None, prepost=False, actions=True,
                 auto_adjust=True, back_adjust=False, repair=True, keepna=False,

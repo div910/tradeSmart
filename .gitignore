@@ -14,3 +14,6 @@ notebooks/datasets/
 #nginx/
 #services/
 #uwsgi/
+
+logs/
+logs/*
