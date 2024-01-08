@@ -20,22 +20,24 @@ class Influx():
 
         # # Convert DataFrame to InfluxDB line protocol format
         points = []
-        # for _, row in fields_dataframe.iterrows():
-        #     point = Point(measurement)
-        #     for tag_key, tag_value in tag_dict.items():
-        #         point.tag(tag_key, tag_value)
-        #     for column, value in row.items():
-        #         point.field(column, value)
-        #     point.time(_)
-        #     points.append(point)
+        if fields_dataframe is not None:
+            for _, row in fields_dataframe.iterrows():
+                point = Point(measurement)
+                for tag_key, tag_value in tag_dict.items():
+                    point.tag(tag_key, tag_value)
+                for column, value in row.items():
+                    point.field(column, value)
+                point.time(_)
+                points.append(point)
 
-        for field in fields_list:
-            point = Point(measurement)
-            for tag_key, tag_value in tag_dict.items():
-                point.tag(tag_key, tag_value)
-            for key, val in field.items():
-                point.field(key, val)
-            points.append(point)
+        if fields_list is not None:
+            for field in fields_list:
+                point = Point(measurement)
+                for tag_key, tag_value in tag_dict.items():
+                    point.tag(tag_key, tag_value)
+                for key, val in field.items():
+                    point.field(key, val)
+                points.append(point)
 
         # [p for p in points]
         line_protocol = "\n".join([p.to_line_protocol() for p in points])
